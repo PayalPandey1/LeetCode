@@ -1,0 +1,74 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* prev;
+    Node* next;
+    Node* child;
+};
+*/
+class Solution {
+public:
+    Node* flatten(Node* head) {
+        if(head == NULL)
+            return NULL ;
+      
+        stack<Node*>S ;
+        Node* ptr = head ;
+        Node *temp ;
+        while(ptr->next != NULL or ptr->child != NULL or !S.empty())
+        {
+            if(ptr->child == NULL and ptr->next != NULL)
+            {
+                     ptr = ptr->next ;
+                   
+            }
+            else if (ptr->child != NULL)
+            {
+                if(ptr->next != NULL)
+                {
+                    S.push(ptr->next) ;
+                    temp = ptr ;
+                    ptr = ptr->child ;  
+                    temp->child = NULL ;
+                    temp->next = ptr ;
+                    ptr->prev = temp ;
+                }
+                else 
+                {
+                    temp = ptr;
+                    ptr->next = ptr->child ;
+                    ptr = ptr->next ;
+                    ptr->prev = temp ;
+                    temp->child = NULL ;
+                }
+            }
+            else if(ptr->next == NULL and ptr->child == NULL and !S.empty())
+            {
+                cout << "ptr->val" << " " << ptr->val << endl ;
+                cout << "c" << " " << endl ;
+                Node* node = S.top() ;
+                //cout << "node->val" << " " << node->val << endl ;
+                S.pop() ;
+                ptr->next = node ;
+                node->prev = ptr ;
+                ptr = ptr->next ;
+                //cout << "c" << endl ;
+            }
+            else if(ptr->next == NULL and ptr->child == NULL and S.empty())
+                ptr->next = NULL ;
+        }
+        if(ptr->next == NULL and S.empty())
+            ptr->next = NULL ;
+         ptr = head ;
+        while(ptr!= NULL)
+        {
+            cout << "ptr->val" <<" " << ptr->val << " " ;
+            ptr = ptr->prev ;
+        }
+        
+        return head ;
+       
+    }
+};
