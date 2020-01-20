@@ -1,0 +1,98 @@
+/* 
+Approach 1: Recursive Solution
+The current solution is very simple. We make use of a function construct(nums, l, r), which returns the maximum binary tree consisting of numbers within the indices ll and rr in the given numsnums array(excluding the r^{th}r 
+th
+  element).
+
+The algorithm consists of the following steps:
+
+Start with the function call construct(nums, 0, n). Here, nn refers to the number of elements in the given numsnums array.
+
+Find the index, max_imax 
+i
+​	
+ , of the largest element in the current range of indices (l:r-1)(l:r−1). Make this largest element, nums[max\_i]nums[max_i] as the local root node.
+
+Determine the left child using construct(nums, l, max_i). Doing this recursively finds the largest element in the subarray left to the current largest element.
+
+Similarly, determine the right child using construct(nums, max_i + 1, r).
+
+Return the root node to the calling function.
+https://leetcode.com/problems/maximum-binary-tree/solution/
+
+*/
+
+
+public class Solution {
+    public TreeNode constructMaximumBinaryTree(int[] nums) {
+        return construct(nums, 0, nums.length);
+    }
+    public TreeNode construct(int[] nums, int l, int r) {
+        if (l == r)
+            return null;
+        int max_i = max(nums, l, r);
+        TreeNode root = new TreeNode(nums[max_i]);
+        root.left = construct(nums, l, max_i);
+        root.right = construct(nums, max_i + 1, r);
+        return root;
+    }
+    public int max(int[] nums, int l, int r) {
+        int max_i = l;
+        for (int i = l; i < r; i++) {
+            if (nums[max_i] < nums[i])
+                max_i = i;
+        }
+        return max_i;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/*
+The key idea is:
+
+We scan numbers from left to right, build the tree one node by one step;
+We use a stack to keep some (not all) tree nodes and ensure a decreasing order;
+For each number, we keep pop the stack until empty or a bigger number; The bigger number (if exist, it will be still in stack) is current number's root, and the last popped number (if exist) is current number's left child (temporarily, this relationship may change in the future); Then we push current number into the stack.
+*/
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+        vector<TreeNode*> stk;
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            TreeNode* cur = new TreeNode(nums[i]);
+            while (!stk.empty() && stk.back()->val < nums[i])
+            {
+                cur->left = stk.back();
+                stk.pop_back();
+            }
+            if (!stk.empty())
+                stk.back()->right = cur;
+            stk.push_back(cur);
+        }
+        return stk.front();
+    }
+};
+
