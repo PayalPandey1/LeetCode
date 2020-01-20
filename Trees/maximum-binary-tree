@@ -1,0 +1,71 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode *current_node = NULL;
+    int find_index(int low, int high, vector<int> nums) 
+    {
+        //cout << "low" << " " << low << " " << "high" << " " << high << endl ;
+        int max = -1 ;
+        int curr_index = -1 ;
+        for(int i = low ; i <= high ; i++)
+        {
+            if(nums[i] > max)
+            {
+                max = nums[i] ;
+                curr_index = i ;
+            }
+        }
+        return curr_index ;
+    } 
+    
+    
+    void  construct_tree(int low, int high, vector<int> nums, int index, TreeNode* curr_node)
+    {
+        if(high < low)
+            return ;
+        int curr_index = find_index(low, high, nums) ;
+        //cout << "curr_index" << " " << curr_index << " " << "index" << " " << index << " " << "nums[curr_index ]" <<  " " << nums[curr_index ] << endl ;
+        TreeNode* node = new TreeNode(nums[curr_index]) ;
+        if(index == -1)
+        { 
+            curr_node->right = node ;
+            curr_node->left = NULL ;
+            curr_node = node ;
+            //cout << "creating right node for" << " " << nums[curr_index] << endl ;
+        }
+        else
+        {
+            if(curr_index > index)
+            {
+                //cout << "creating right node for" << " " << nums[curr_index] << endl ;
+                curr_node->right = node ;
+                curr_node = node ;
+            }
+            else
+            {
+                //cout << "creating left node for" << " " << nums[curr_index] << endl ;
+                curr_node->left = node ;
+                curr_node = node ;
+            }
+        }
+        construct_tree(low, curr_index -1, nums, curr_index, curr_node) ;
+        construct_tree(curr_index + 1, high, nums, curr_index, curr_node) ;
+    }
+    TreeNode* constructMaximumBinaryTree(vector<int>& nums) {
+       TreeNode *root = new TreeNode(-1) ;
+       int low = 0 ;
+       int high = nums.size() -1 ;
+       int index = -1 ;
+       //cout << "high" << " " << high << endl ;
+       construct_tree(low, high, nums, index, root);
+       return root->right;
+    }
+};
