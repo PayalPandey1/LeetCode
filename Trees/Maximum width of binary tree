@@ -1,0 +1,36 @@
+class Solution {
+    int ans;
+    Map<Integer, Integer> left;
+    public int widthOfBinaryTree(TreeNode root) {
+        ans = 0;
+        left = new HashMap();
+        dfs(root, 0, 0);
+        return ans;
+    }
+    public void dfs(TreeNode root, int depth, int pos) {
+        if (root == null) return;
+        left.computeIfAbsent(depth, x-> pos);
+        ans = Math.max(ans, pos - left.get(depth) + 1);
+        dfs(root.left, depth + 1, 2 * pos);
+        dfs(root.right, depth + 1, 2 * pos + 1);
+    }
+}
+
+
+/*\
+
+
+Traverse each node in depth-first order, keeping track of that node's position. For each depth, the position of the first node reached of that depth will be kept in left[depth].
+
+Then, for each node, a candidate width is pos - left[depth] + 1. We take the maximum of the candidate answers.
+Complexity Analysis
+
+Time Complexity: O(N)O(N) where NN is the number of nodes in the input tree. We traverse every node.
+
+Space Complexity: O(N)O(N), the size of the implicit call stack in our DFS.
+
+
+
+PROBLEM/
+Was that really accepted? I wonder about the case when the input is a tree always going to the right. As far as I understand, your 'pos' integer variable would overflow with a depth > 32. I am asking it because it happened to me.
+*/
