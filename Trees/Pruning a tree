@@ -1,0 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+
+    bool helper(TreeNode* root)
+    {
+        if(root == NULL)
+            return true;
+        bool left = helper(root->left) ;
+        bool right = helper(root->right) ;
+        bool bool_flag = true ;
+        if(root->val == 1)
+            bool_flag = false ;
+        if(left){root->left = NULL ;}
+        if(right){root->right = NULL ;}
+        if(!(left and right and bool_flag))
+        {
+            //cout << "root->val" << "  " << root->val << " " << "false" << endl ;
+            return false;
+        }
+        //cout << "root->val" << "  " << root->val << " " << "true" << endl ;
+        return true ;
+    }
+    
+    void traverse(TreeNode* root)
+    {
+        if(root== NULL)
+            return ;
+        traverse(root->left) ;
+        cout << " " << root->val << " " ;
+        traverse(root->right) ;
+    }
+    TreeNode* pruneTree(TreeNode* root) {
+        if(root== NULL)
+            return NULL ;
+        TreeNode* ptr1 = root ;
+        TreeNode* ptr = root ;
+        helper(ptr1) ;
+        root = ptr ;
+        //cout << "main root->val" << " " << root->val << endl ;
+        traverse(ptr) ;
+        if(root != NULL)
+            return root ;
+        return NULL ;
+    }
+};
