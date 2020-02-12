@@ -1,0 +1,35 @@
+class Solution {
+public:
+
+    int compress(vector<char>& chars) {
+        vector<char> :: iterator it ;
+        it = chars.begin() ;
+        for(int i = 0 ; i<chars.size() ; i++)
+        {    
+            
+            int ptr2 = i ;
+            int start = i ;
+            while( ptr2 <chars.size() and chars[i]==chars[ptr2])
+            {
+               ptr2++ ;
+            }
+            int end = ptr2- 1;
+            
+            if(end < chars.size() and ptr2 !=i )
+            {
+                int curr_count = end- start ;
+                int k = 1 ;
+                while(curr_count != 0)
+                {
+                    int digit = curr_count % 10 ;
+                    char c = digit + '0';
+                    chars[start+k] = c ;
+                    k++ ;
+                    curr_count = curr_count/10 ;
+                }
+                chars.erase(it + start + k, it + (end-start + 1)) ;
+            }   
+        }
+        return chars.size() ;
+    }
+};
