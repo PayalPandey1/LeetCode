@@ -1,0 +1,41 @@
+class Solution {
+public:
+    string convert(string s, int num_rows) {
+        
+        char table[num_rows][s.length()] ;
+        for(int i=0; i < num_rows; i++)
+        {
+            for(int j=0; j < s.length() ; j++)
+            {
+                table[i][j] = '@';
+            }
+        }
+        int length = 0 ;
+        int col = 0 ;
+        while(length < s.length())
+        {
+            for(int i=0 ; i < num_rows and length < s.length(); i++)
+            {
+                table[i][col] = s[length] ;
+                length++ ;  
+            }
+            col++ ;
+            for(int j = num_rows-2; j >= 1  and length < s.length(); j--)
+            {
+                table[j][col] = s[length] ;
+                length++ ;
+                col++ ;
+            }
+        }
+        string res = "" ;
+        for(int i=0; i <num_rows; i++)
+        {
+            for(int j=0; j < s.length() ; j++)
+            {
+                if(table[i][j] != '@')
+                    res = res + (table[i][j]) ;
+            }
+        }
+       return res ;    
+    }
+};
