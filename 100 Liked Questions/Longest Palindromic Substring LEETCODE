@@ -1,0 +1,97 @@
+
+class Solution {
+public:
+    string longestPalindrome(string s) {
+         if(s == "" || s.length() < 1)
+            return "";
+        int table[s.length()][s.length()] ;
+         
+         for(int i=0 ; i < s.length() ; i++)
+         {
+            for(int j = 0 ; j < s.length() ; j++)
+            {
+                table[i][j] = 0 ;
+                if(i == j)
+                {
+                    table[i][j] = 1 ;
+                }
+            }
+         }
+ 
+        int start_s = 0 ;
+        int end_s = 0 ;
+        int max_length = 1 ;
+        
+       
+            
+        if(s[1] == s[0])
+        {
+            table[0][1] = 1 ;
+            table[1][1] = 1 ;
+            table[0][0] = 1 ;
+            max_length = 2 ;
+            start_s = 0;
+            end_s = 1 ;
+        }
+        
+        for(int i=2 ; i<s.length() ; i++)
+        {
+            for(int j=0 ; j <i ; j++)
+            {
+               
+                int ls = i-j + 1 ;
+                if(i- j == 1)
+                {
+                    if(s[i] == s[j])
+                    {
+                        table[j][i] = 1 ;
+                        if(ls > max_length)
+                        {
+                            max_length = ls;
+                            start_s = j ;
+                            end_s = i ;
+                        }
+                    }
+                }
+                else if(s[j] == s[i] and table[j+1][i-1] == 1 )
+                {
+                    table[j][i] = 1 ;
+                    if(ls > max_length)
+                    {
+                        max_length = ls ;
+                        start_s = j ;
+                        end_s = i ;
+                    }
+                }
+            }
+        }
+        string res = s.substr(start_s, max_length) ;
+        return res ;
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+PLEASE GO THROUGH THE SOLUTION SUGGESTED BY LEETCODE 
+
+/*
