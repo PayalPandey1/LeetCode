@@ -1,0 +1,98 @@
+int ele;
+int l_index;
+int r_index;
+
+class Solution {
+  public:
+
+    void find_var_right(vector < int > & nums, int target, int low, int high) {
+        if (low <= high) {
+        int mid = (low + high) / 2;
+      if (mid - 1 >= 0 and nums[mid] == target and nums[mid - 1] < target) {
+        l_index = mid;
+        return;
+      } else if (mid + 1 < nums.size() and nums[mid] == target and nums[mid + 1] > target) {
+        r_index = mid;
+        return;
+      }
+      if(nums[mid] > target){
+        find_var_right(nums, target, low, mid - 1);
+      }
+        if(nums[mid] == target and mid == nums.size() - 1){
+        r_index = mid;
+        return;
+      } 
+      if(nums[mid] == target){
+        find_var_right(nums, target, mid + 1, high);
+      }
+        
+      }
+    }
+
+  void find_var_left(vector < int > & nums, int target, int low, int high) {
+      if (low <= high) {
+      int mid = (low + high) / 2;
+    if (mid - 1 >= 0 and nums[mid] == target and nums[mid - 1] < target) {
+      l_index = mid;
+      return;
+    } else if (mid + 1 < nums.size() and nums[mid] == target and nums[mid + 1] > target) {
+      r_index = mid;
+      return;
+    }
+    if (nums[mid] < target) {
+      find_var_left(nums, target, mid + 1, high);
+    }
+    if( nums[mid] == target and mid == 0 ){
+       l_index = mid;
+       return;
+    }
+    if( nums[mid] == target ){
+      find_var_left(nums, target, low, mid - 1);
+    }
+    }
+  }
+
+  void find_nums(vector < int > & nums, int target, int low, int high) {
+    if (low <= high) {
+      int mid = (low + high) / 2;
+    if (nums[mid] == target) {
+      ele = mid;
+      return;
+    }
+    if (nums[mid] > target) {
+      find_nums(nums, target, low, mid - 1);
+    }
+    if (nums[mid] < target) {
+      find_nums(nums, target, mid + 1, high);
+    }
+  }
+}
+
+vector<int>res ;
+    
+vector < int > searchRange(vector < int > & nums, int target) {
+  ele = -1;
+  l_index = -1;
+  r_index = -1;
+  int low = 0;
+  int high = nums.size() -1 ;
+  find_nums(nums, target, low, high);
+  if (ele == -1) {
+    res.push_back(-1);
+    res.push_back(-1);
+    return res ;
+  }
+  find_var_left(nums, target, low, ele - 1);
+  find_var_right(nums, target, ele + 1, high);
+   if(l_index == -1){
+         l_index = ele ;
+   }
+    if(r_index == -1){
+        r_index = ele  ;
+    }
+    res.push_back(l_index) ;
+    res.push_back(r_index) ;
+    return res ;
+
+}
+};
