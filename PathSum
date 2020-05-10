@@ -1,0 +1,30 @@
+https://leetcode.com/problems/path-sum/
+
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    
+    def dfs(self,root, curr_sum, sum, level, parent):
+        if root is None:
+            if curr_sum == sum and parent.left is None and parent.right is None:
+                return True
+            return False
+        print("root.val: {}  level: {}, curr_sum: {}".format(root.val , level, curr_sum))
+        return self.dfs(root.left, curr_sum + root.val, sum, level + 1, root) or self.dfs(root.right , curr_sum + root.val, sum, level + 1, root) 
+    
+    def hasPathSum(self, root: TreeNode, sum: int) -> bool:
+        if root is None:
+            return False
+        if root.val == sum and root.left is None and root.right is None:
+            return True
+        curr_sum = 0
+        parent = None
+        level = 0 
+        flag = self.dfs(root, curr_sum, sum, level, parent)
+        return flag
+        
