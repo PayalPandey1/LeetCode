@@ -1,0 +1,31 @@
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+total_sum = 0
+class Solution:
+    
+    def path_sum(self, root, curr_string):
+        global total_sum
+        if root is None:
+            return
+        if root.left is None and root.right is None:
+            curr_string = curr_string + str(root.val)
+            number = int(curr_string)
+            total_sum = total_sum + number
+            return
+        self.path_sum(root.left, curr_string + str(root.val))
+        self.path_sum(root.right, curr_string + str(root.val))
+    
+    def sumNumbers(self, root: TreeNode) -> int:
+        global res
+        global total_sum
+        total_sum =0
+        curr_string = ""
+        
+        self.path_sum(root, curr_string)
+        return total_sum
+        
