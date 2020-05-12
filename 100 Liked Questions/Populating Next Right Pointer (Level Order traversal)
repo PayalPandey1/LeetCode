@@ -1,0 +1,43 @@
+"""
+# Definition for a Node.
+class Node:
+    def __init__(self, val: int = 0, left: 'Node' = None, right: 'Node' = None, next: 'Node' = None):
+        self.val = val
+        self.left = left
+        self.right = right
+        self.next = next
+"""
+from queue import Queue 
+class Solution:
+    def connect(self, root: 'Node') -> 'Node':
+        q = Queue(maxsize = 0) 
+        list_ele = []
+        if root is None:
+            return None
+        q.put(root)
+        while(not q.empty()):
+            size = q.qsize()
+            list_smol = []
+            while(size > 0):
+                front = q.get()
+                list_smol.append(front)
+                if front.left is not None:
+                    q.put(front.left)
+                if front.right is not None:
+                    q.put(front.right)
+                size -= 1
+            list_ele.append(list_smol)
+        for item in list_ele:
+            list_smol = item 
+            for i in range(0, len(list_smol)):
+                if i == (len(list_smol) - 1):
+                    list_smol[i].next = None
+                else:
+                    list_smol[i].next = list_smol[i+1]
+        return root
+                
+                    
+                
+                
+        
+        
