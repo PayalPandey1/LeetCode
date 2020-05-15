@@ -1,0 +1,61 @@
+class Solution {
+public:
+    
+    void dfs(vector<vector<char>>& grid, vector<vector<bool>>& matrix, int curr_row, int curr_col)
+    {
+        //cout << "curr_row" << " " << curr_row << " " << "curr_col" << " " << curr_col << endl ;
+        if(curr_col >= grid[0].size() or curr_row >= grid.size() or curr_row < 0 or curr_col < 0 or matrix[curr_row][curr_col])
+        {
+            return ;
+        }
+        
+        if(grid[curr_row][curr_col] == '0'){ 
+            matrix[curr_row][curr_col] = true ;
+            return ;
+        }
+    
+        if(grid[curr_row][curr_col] == '1' and matrix[curr_row][curr_col] == false ){ 
+            //cout << "curr_row" << " " << curr_row << " " << "curr_col" << " " << curr_col << endl ;
+            matrix[curr_row][curr_col] = true ;
+        }
+        
+        dfs(grid, matrix, curr_row + 1, curr_col);
+        dfs(grid, matrix, curr_row , curr_col + 1);
+        dfs(grid, matrix, curr_row - 1, curr_col);
+        dfs(grid, matrix, curr_row , curr_col - 1);
+    }
+    
+    
+    int numIslands(vector<vector<char>>& grid) {
+        if(grid.size() == 0)
+            return 0;
+        int col = grid[0].size();
+        int row = grid.size() ;
+        vector< vector<bool> > matrix;
+        for(int i=0; i<row; i++)
+        {
+            vector<bool>smol ;
+            for(int j=0; j<col; j++)
+            {
+                smol.push_back(false) ;
+            }
+            matrix.push_back(smol);
+        }
+        int islands = 0 ;
+        for(int i=0; i <row; i++)
+        {
+            for(int j=0; j < col; j++)
+            {
+                 //cout << "i" << " " << i << " " << "j" << " " << j << endl;
+                 //cout << "grid[i][j]" << " " << grid[i][j] << " " << "matrix[i][j]" << " " << matrix[i][j] << endl ;
+                 if(grid[i][j] == '1' and matrix[i][j] == false )
+                 {
+                    dfs(grid, matrix, i, j) ;
+                    islands += 1 ;
+                 }
+            }
+        }
+    
+    return islands;
+    }
+};
