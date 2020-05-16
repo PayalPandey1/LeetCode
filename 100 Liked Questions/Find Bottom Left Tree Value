@@ -36,3 +36,23 @@ public:
         return left;
     }
 };
+
+**********************************************************************************************************************
+
+
+int findBottomLeftValue(TreeNode* root) {
+        if (!root)return -1;
+        queue<TreeNode*> q;
+        TreeNode* u = NULL; 
+        q.push(root);
+        while (!q.empty()) {
+            int cnt = q.size();
+            while (cnt--) {
+                u = q.front();
+                q.pop();
+                if (u->right)q.push(u->right);
+                if (u->left)q.push(u->left);
+            }
+        }
+    return u->val;
+    }
