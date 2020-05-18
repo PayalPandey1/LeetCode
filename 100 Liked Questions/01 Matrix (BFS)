@@ -1,0 +1,81 @@
+
+class Solution {
+public:
+    
+    int bfs(vector<vector<int>>& matrix, int r, int c, vector<vector<int>>& dist)
+    {
+        queue< pair<int, int> >q;
+        bool flag = true ;
+        q.push(make_pair(r,c));
+        //cout << "r" << " " << r << " " << "c" << " " << c << endl ;
+        while(!q.empty() and flag)
+        {
+            int size = q.size();
+            while(size--)
+            {
+                pair<int, int>p = q.front();
+                int row = p.first ;
+                int col = p.second ;
+                //cout <<"row " << " " << row << " " << "col" << " " << col << endl ;
+                q.pop() ;
+                int x_dir[] = {-1, +1, 0, 0};
+                int y_dir[] = {0, 0, -1, +1} ;
+                for(int i=0; i<4; i++)
+                {
+                    int curr_row = row + x_dir[i];
+                    int curr_col = col + y_dir[i] ;
+                    if( curr_row < dist.size() and curr_col < dist[0].size() and curr_row >= 0 and curr_col >= 0 )
+                    {
+                        //cout <<"curr_row " << " " << curr_row << " " << "curr_col" << " " << curr_col << endl ;
+                        if(matrix[curr_row][curr_col] == 0)
+                        {
+                            //cout << "abs(curr_row -r) + abs(curr_col - c)" << " " << abs(curr_row - r + curr_col -  c) << endl ;
+                            //cout << "dist[r][c]" << "  " << dist[r][c] << endl ;
+                            if(abs(curr_row - r) + abs(curr_col -  c) < dist[r][c])
+                            {
+                                dist[r][c] = abs(curr_row - r )+ abs(curr_col - c) ;
+                            }
+                            //cout << "dist[r][c]" << " " << dist[r][c] << endl ;
+                            flag = false ;
+                            break ;
+                        }
+                        else{
+                            q.push(make_pair(curr_row, curr_col)) ;
+                        }
+                    }  
+                } 
+            }
+        }
+        return dist[r][c] ;
+    }
+    
+    
+    vector<vector<int>> updateMatrix(vector<vector<int>>& matrix) {
+        vector< vector<int> > dist;
+        
+        for(int i=0; i < matrix.size(); i++)
+        {
+            vector<int>inner_dist;
+            for(int j=0; j < matrix[0].size(); j++)
+            {
+                inner_dist.push_back(100002);
+            }
+            dist.push_back(inner_dist) ;
+        }
+        
+
+        
+        for(int i=0; i < matrix.size(); i++)
+        {
+            for(int j=0; j < matrix[0].size(); j++)
+            {
+                if(matrix[i][j] == 1)
+                {
+                   matrix[i][j] =  bfs(matrix,i,j, dist) ;
+                }
+                
+            }
+        }
+       return matrix ; 
+    }
+};
