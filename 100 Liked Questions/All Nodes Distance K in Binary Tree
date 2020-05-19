@@ -1,0 +1,127 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    map<TreeNode*, TreeNode*>map ;
+    set<TreeNode*>seen;
+    vector<int>res;
+    void parents(TreeNode* root, TreeNode* parent){
+        if(root == NULL){
+            return ;
+        }
+        map[root] = parent ;
+        parents(root->left, root);
+        parents(root->right, root);      
+    }
+    
+    void hop_to_level(TreeNode* root, int K){
+        queue<TreeNode*>q;
+       // cout << "root->val" << " " << root->val << endl ;
+        if(root->left != NULL)
+            q.push(root->left);
+        if(root->right != NULL)
+            q.push(root->right);
+        if(map[root] != NULL)
+            q.push(map[root]);
+         if(root->left != NULL)
+           // cout << "push_left" << " " << root->left->val << endl;
+        if(root->right != NULL)
+         //   cout << "push_right" << " " << root->right->val << endl;
+        if(map[root] != NULL)
+        //    cout << "push_parent" << " " << map[root]->val << endl;
+        
+        if(root->left != NULL)
+            seen.insert(root->left);
+        if(root->right != NULL)
+            seen.insert(root->right);
+        if(map[root] != NULL)
+            seen.insert(map[root]);
+        int level = 1;
+        
+        while(!q.empty() and level < K)
+        {
+            int size = q.size();
+           // cout << "level" << " " << level << endl ;
+            while(size--)
+            {
+                TreeNode* front = q.front() ;
+                q.pop();
+                seen.insert(front);
+               // cout << "front" << " " << front->val << endl ;
+                if(front->left != NULL and  (seen.find(front->left) == seen.end()))
+                {
+                    q.push(front->left);
+                    seen.insert(front->left);
+                  //  cout << "push_left" << " " << front->left->val << endl;
+                }
+                if(front->right != NULL and  (seen.find(front->right) == seen.end()))
+                {
+                    q.push(front->right);
+                    seen.insert(front->right);
+                 //   cout << "push_right" << " " << front->right->val << endl;
+                }
+                if(map[front] != NULL and  (seen.find(map[front]) == seen.end()))
+                {
+                    q.push(map[front]);
+                    seen.insert(map[front]);
+                  //  cout << "push_parent" << " " << map[front]->val << endl;
+                }
+            }
+            // cout << "\n \n";
+            level++ ;
+        }
+       // cout << "outta1" << endl ;
+        if(level == K)
+        {
+           int size = q.size();
+          // cout << "qsize()" << " " << q.size() << endl ;
+            while(size--)
+            {
+                TreeNode* front = q.front() ;
+             //   cout << "front->val" << " " << front->val << endl ;
+                res.push_back(front->val) ;
+                q.pop();
+                if(front->left != NULL and  (seen.find(front->left) == seen.end()))
+                {
+                    q.push(front->left);
+                }
+                if(front->right != NULL and  (seen.find(front->right) == seen.end()))
+                {
+                    q.push(front->right);
+                }
+                if(map[front] != NULL and  (seen.find(map[front]) == seen.end()))
+                {
+                    q.push(map[front]);
+                }
+                
+            } 
+        }
+    }
+    
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        res.clear();
+        seen.clear();
+        map.clear();
+        TreeNode* root_copy = root ;
+        if(root == NULL){return res;}
+        if(K== 0){
+            res.push_back(target->val);
+            return res;
+        }
+        TreeNode* ptr_null = NULL ;
+        map[root] = ptr_null;
+        parents(root_copy, ptr_null);
+        seen.insert(target);
+       // cout << "target->val" << " " << target->val << endl;
+        hop_to_level(target, K);
+        
+        return res ;
+    }
+};
