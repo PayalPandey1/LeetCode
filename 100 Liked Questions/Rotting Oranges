@@ -1,0 +1,89 @@
+class Solution {
+public:
+    queue< pair<int, int> >queue;
+    int time = 0;
+    int x[4] = {-1,+1,0,0};
+    int y[4] = {0,0,-1,+1};
+    int fresh_oranges = 0;
+    
+    bool valid_cord(int i, int j, vector<vector<int>>& grid)
+    {
+        if(i < grid.size() and j < grid[0].size() and i >= 0 and j >= 0)
+            return true ;
+        return false;
+        
+    }
+    
+    void bfs(vector<vector<int>>& grid, vector<vector<bool>>& visited)
+    {
+        while(!queue.empty())
+        {
+            int size = queue.size();
+            while(size--)
+            {
+                pair<int, int> p = queue.front();
+                queue.pop();
+                for(int i=0; i<4; i++)
+                {
+                    int xc = p.first + x[i] ;
+                    int yc = p.second + y[i];
+                    if(valid_cord(xc, yc, grid) and !visited[xc][yc])
+                    {
+                        visited[xc][yc] = true ;
+                        if(grid[xc][yc] == 1)
+                        {
+                            grid[xc][yc] = 2 ;
+                            fresh_oranges -= 1;
+                            queue.push(make_pair(xc,yc));
+                            
+                        }
+                        
+                    }
+                }
+            }
+            time++ ;
+        }
+        
+    }
+     
+    int orangesRotting(vector<vector<int>>& grid) {
+        time = 0;
+        fresh_oranges = 0 ;
+        vector< vector<bool> > visited;
+        for(int i=0; i < grid.size(); i++){
+            vector<bool>smol;
+            for(int j=0; j < grid[0].size(); j++)
+            {
+                smol.push_back(false);
+            }visited.push_back(smol);
+        }   
+        
+        for(int i=0; i < grid.size(); i++){
+            for(int j=0; j < grid[0].size(); j++)
+            {
+                if(grid[i][j] == 2)
+                {
+                    queue.push(make_pair(i,j)) ;
+                    visited[i][j] = true ;
+                }
+                if(grid[i][j] == 1)
+                {
+                    fresh_oranges +=1 ;
+                }
+                
+            }
+        }  
+        
+        if(fresh_oranges == 0)
+        {
+            return 0 ;
+        }
+        
+        bfs(grid, visited);
+        if(fresh_oranges > 0)
+        {
+            return -1 ;
+        }
+        return time -1;
+    }
+};
