@@ -1,0 +1,91 @@
+class Solution {
+public:
+
+    void dfs(vector<vector<char>>& boards, int x, int y)
+    {
+        if( x <= 0 or y <=  0 or x >= boards.size() -1 or y >= boards[0].size() -1 or boards[x][y] != 'O')
+            return ;
+    
+          if(boards[x][y] == 'O')
+          {
+              boards[x][y] = 'F';
+          }
+        
+            dfs(boards, x+1, y); 
+            dfs(boards, x, y+1);
+            dfs(boards, x-1, y);
+            dfs(boards, x, y-1);
+            
+    }
+    
+    void solve(vector<vector<char>>& boards) {
+        vector<vector<bool>> visited ;
+        if(boards.size() == 0) return ;
+        else if(boards[0].size() == 0) return;
+        for(int i=0; i < boards.size(); i++)
+        {
+            if(boards[i][0] == 'O')
+            {
+                boards[i][0] = 'F';
+                dfs(boards, i, 0+1);
+
+            }  
+        }
+        
+        for(int i=0; i < boards[0].size(); i++)
+        {
+            if( boards[0][i] == 'O')
+            {
+                boards[0][i] = 'F';
+                dfs(boards, 0+1, i) ;
+           
+            }
+        }
+        
+        for(int i=0; i < boards.size(); i++)
+        {
+            //cout << "x" << " " << i << " " << "y" << " " << boards[0].size() - 1 << endl ;
+            if(boards[i][boards[0].size() - 1] == 'O')
+            {
+                cout << "x" << " " << i << " " << "y" << " " << boards[0].size() - 1 << endl ;
+                boards[i][boards[0].size() - 1] = 'F';
+                dfs(boards, i, boards[0].size() - 2);
+            }
+            
+        }
+        
+        for(int i=0; i < boards[0].size(); i++)
+        {
+            if(boards[boards.size() -1][i] == 'O')
+            {
+                boards[boards.size() -1][i] = 'F';
+                dfs(boards, boards.size() -2, i) ;
+             
+            }
+        }
+        
+        for(int i=0; i < boards.size(); i++)
+        {
+            for(int j=0; j < boards[0].size(); j++)
+            {
+               cout << boards[i][j] << " " ;
+            }cout << endl ;
+        }
+        
+        
+        
+        
+        for(int i=0; i < boards.size(); i++)
+        {
+            for(int j=0; j < boards[0].size(); j++)
+            {
+                if(boards[i][j] =='O')
+                    boards[i][j] = 'X' ;
+                else if(boards[i][j] == 'F')
+                    boards[i][j] = 'O' ;
+            }
+        }
+        
+       
+    }
+};
