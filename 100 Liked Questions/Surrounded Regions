@@ -19,7 +19,6 @@ public:
     }
     
     void solve(vector<vector<char>>& boards) {
-        vector<vector<bool>> visited ;
         if(boards.size() == 0) return ;
         else if(boards[0].size() == 0) return;
         for(int i=0; i < boards.size(); i++)
@@ -30,6 +29,12 @@ public:
                 dfs(boards, i, 0+1);
 
             }  
+            if(boards[i][boards[0].size() - 1] == 'O')
+            {
+                //cout << "x" << " " << i << " " << "y" << " " << boards[0].size() - 1 << endl ;
+                boards[i][boards[0].size() - 1] = 'F';
+                dfs(boards, i, boards[0].size() - 2);
+            }
         }
         
         for(int i=0; i < boards[0].size(); i++)
@@ -40,22 +45,6 @@ public:
                 dfs(boards, 0+1, i) ;
            
             }
-        }
-        
-        for(int i=0; i < boards.size(); i++)
-        {
-            //cout << "x" << " " << i << " " << "y" << " " << boards[0].size() - 1 << endl ;
-            if(boards[i][boards[0].size() - 1] == 'O')
-            {
-                cout << "x" << " " << i << " " << "y" << " " << boards[0].size() - 1 << endl ;
-                boards[i][boards[0].size() - 1] = 'F';
-                dfs(boards, i, boards[0].size() - 2);
-            }
-            
-        }
-        
-        for(int i=0; i < boards[0].size(); i++)
-        {
             if(boards[boards.size() -1][i] == 'O')
             {
                 boards[boards.size() -1][i] = 'F';
@@ -63,17 +52,6 @@ public:
              
             }
         }
-        
-        for(int i=0; i < boards.size(); i++)
-        {
-            for(int j=0; j < boards[0].size(); j++)
-            {
-               cout << boards[i][j] << " " ;
-            }cout << endl ;
-        }
-        
-        
-        
         
         for(int i=0; i < boards.size(); i++)
         {
